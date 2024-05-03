@@ -36,6 +36,7 @@ public class LoginOtpActivity extends AppCompatActivity {
 
     String verificationCode;
     PhoneAuthProvider.ForceResendingToken resendingToken;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,9 @@ public class LoginOtpActivity extends AppCompatActivity {
 
         phoneNumber = Objects.requireNonNull(getIntent().getExtras()).getString("phone");
         sendOtp(phoneNumber,false);
+        Toast.makeText(getApplicationContext(), phoneNumber, Toast.LENGTH_SHORT).show();
+        Map<String,String> data = new HashMap<>();
+        FirebaseFirestore.getInstance().collection("test").add(data);
     }
 
     void sendOtp(String phoneNumber,boolean isResend){
@@ -67,7 +71,8 @@ public class LoginOtpActivity extends AppCompatActivity {
 
                             @Override
                             public void onVerificationFailed(@NonNull FirebaseException e) {
-                                AndroidUtils.showToast(getApplicationContext(),"OTP verification failed");
+                                Toast.makeText(getApplicationContext(), "OTP verification failed", Toast.LENGTH_SHORT).show();
+
                                 setInProgress(false);
                             }
 
@@ -76,7 +81,7 @@ public class LoginOtpActivity extends AppCompatActivity {
                                 super.onCodeSent(s, forceResendingToken);
                                 verificationCode = s;
                                 resendingToken = forceResendingToken;
-                                AndroidUtils.showToast(getApplicationContext(),"OTP sent successfully");
+                                Toast.makeText(getApplicationContext(), "OTP sent successfully", Toast.LENGTH_SHORT).show();
                                 setInProgress(false);
                             }
                         });
